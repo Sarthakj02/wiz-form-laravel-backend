@@ -41,4 +41,27 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Add filtration to the Model.
+     *
+     * @param  mixed $query
+     * @param  mixed $filters
+     * @return void
+     */
+    public function scopeFilter($query, $filters)
+    {
+
+        if (!empty(request()->input('search'))) {
+            $query->orWhere('id', request()->input('search'));
+            $query->orWhere('name', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('email', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('dob', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('phone', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('college', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('cgpa', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('qualification', 'LIKE', "%" . request()->input('search') . "%");
+            $query->orWhere('hobby', 'LIKE', "%" . request()->input('search') . "%");
+        }
+    }
 }

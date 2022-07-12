@@ -14,9 +14,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $users = User::filter($request->all())->get();
         return response()->json(compact('users'));
     }
 
