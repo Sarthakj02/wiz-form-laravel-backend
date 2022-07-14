@@ -17,6 +17,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::filter($request->all())->get();
+        // \Log::info(request()->sortOrder);
+        // \Log::info(request()->sortField);
+        $users->sort();
         return response()->json(compact('users'));
     }
 
@@ -38,7 +41,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        \Log::info($request);
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;

@@ -64,4 +64,21 @@ class User extends Authenticatable
             $query->orWhere('hobby', 'LIKE', "%" . request()->input('search') . "%");
         }
     }
+
+    /**
+     * Add sorting to the Model.
+     *
+     */
+    public function scopeSort($query)
+    {
+        if (request()->sortOrder === 'desc') {
+            $query->orderBy(request()->sortField, 'desc');
+        } elseif (request()->sortOrder === 'asc') {
+            $query->orderBy(request()->sortField, 'asc');
+        } else {
+            $query->orderBy('id', 'desc');
+        }
+
+        return $query;
+    }
 }
