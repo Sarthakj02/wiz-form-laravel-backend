@@ -53,6 +53,7 @@ class UserController extends Controller
         $user->work_experience = $request->work_experience;
         $user->password = Hash::make($request->password);
         $user->save();
+        return response()->json(['success' => true, 'user' => $user]);
     }
 
     /**
@@ -61,9 +62,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return response()->json(['success' => true, 'user' => $user]);
     }
 
     /**
