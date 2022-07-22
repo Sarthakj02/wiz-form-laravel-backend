@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -115,6 +116,46 @@ class UserController extends Controller
         }
         $user->save();
         return response()->json(['success' => true, 'user' => $user]);
+    }
+
+    public function upload_user_photo(Request $request)
+    {
+        // check if image has been received from form
+        if ($request->file('avatar')) {
+            // check if user has an existing avatar
+            if ($this->guard()->user()->avatar != NULL) {
+                // delete existing image file
+                Storage::disk('user_avatars')->delete($this->guard()->user()->avatar);
+            }
+
+            // processing the uploaded image
+            $avatar_name = $this->random_char_gen(20) . '.' . $request->file('avatar')->getClientOriginalExtension();
+            $avatar_path = $request->file('avatar')->storeAs('', $avatar_name, 'user_avatars');
+
+            // Update user's avatar column on 'users' table
+            $profile = User::find(3);
+            $profile->avatar = $avatar_path;
+
+            if ($profile->save()) {
+                return response()->json([
+                    'status'    =>  'success',
+                    'message'   =>  'Profile Photo Updated!',
+                    'avatar_url' =>  url('storage/user-avatar/' . $avatar_path)
+                ]);
+            } else {
+                return response()->json([
+                    'status'    => 'failure',
+                    'message'   => 'failed to update profile photo!',
+                    'avatar_url' => NULL
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status'    => 'failure',
+            'message'   => 'No image file uploaded!',
+            'avatar_url' => NULL
+        ]);
     }
 
     /**

@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'api'], function ($router) {
     Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::post('users/upload_avatar', [App\Http\Controllers\UserController::class, 'upload_user_photo']);
 });
