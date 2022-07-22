@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -85,9 +86,35 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'name'    => 'required',
+            'email'   => 'required|email',
+            'password'  => ['sometimes', 'nullable', Password::min(8)->mixedCase()->numbers()->symbols(), 'confirmed'],
+            'hobby'    => 'required',
+            'qualification'    => 'required',
+            'college' => 'required',
+            'cgpa'    => 'required|numeric|between:0.00,10.00',
+            'phone'   => 'required|digits:10|distinct',
+            'dob'     => 'required|date',
+            'work_experience' => 'required|string|min:3|max:60',
+        ]);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->cgpa = $request->cgpa;
+        $user->hobby = $request->hobby;
+        $user->dob = $request->dob;
+        $user->qualification = $request->qualification;
+        $user->college = $request->college;
+        $user->phone = $request->phone;
+        $user->work_experience = $request->work_experience;
+
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+        return response()->json(['success' => true, 'user' => $user]);
     }
 
     /**

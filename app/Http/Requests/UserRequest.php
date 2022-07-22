@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
             'hobby'    => 'required',
             'qualification'    => 'required',
             'college' => 'required',
-            'cgpa'    => 'required|numeric|digits_between:1,10',
+            'cgpa'    => 'required|numeric|between:0.00,10.00',
             'phone'   => 'required|digits:10|distinct',
             'dob'     => 'required|date',
             'work_experience' => 'required|string|min:3|max:60',
