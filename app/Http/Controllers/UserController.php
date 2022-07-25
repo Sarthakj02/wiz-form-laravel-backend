@@ -53,6 +53,11 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->work_experience = $request->work_experience;
         $user->password = Hash::make($request->password);
+        if ($request->hasFile('profile_image')) {
+            $filename = $request->profile_image->getClientOriginalName();
+            $request->profile_image->storeAs('images', $filename, 'public');
+            $user->profile_image = $filename;
+        }
         $user->save();
         return response()->json(['success' => true, 'user' => $user]);
     }

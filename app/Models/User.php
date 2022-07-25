@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_image',
     ];
 
     /**
@@ -80,5 +81,13 @@ class User extends Authenticatable
         }
 
         return $query;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProfileImageAttribute($value)
+    {
+        return public_path($value);
     }
 }
