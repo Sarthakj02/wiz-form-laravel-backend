@@ -35,6 +35,7 @@ class UserRequest extends FormRequest
             'phone'   => 'required|digits:10|distinct',
             'dob'     => 'required|date',
             'work_experience' => 'required|string|min:3|max:60',
+            'profile_image' => 'required|image|max:10240',
         ];
     }
 }

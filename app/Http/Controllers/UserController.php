@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -53,8 +54,9 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->work_experience = $request->work_experience;
         $user->password = Hash::make($request->password);
+        $user->save();
         if ($request->hasFile('profile_image')) {
-            $filename = $request->profile_image->getClientOriginalName();
+            $filename = "user_" . $user->id . "." . $request->profile_image->extension();
             $request->profile_image->storeAs('images', $filename, 'public');
             $user->profile_image = $filename;
         }
@@ -93,6 +95,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        //\Log::info();
         $request->validate([
             'name'    => 'required',
             'email'   => 'required|email',
@@ -104,6 +107,7 @@ class UserController extends Controller
             'phone'   => 'required|digits:10|distinct',
             'dob'     => 'required|date',
             'work_experience' => 'required|string|min:3|max:60',
+            'profile_image' => 'sometimes|nullable|image|max:10240',
         ]);
         $user->name = $request->name;
         $user->email = $request->email;
@@ -114,6 +118,15 @@ class UserController extends Controller
         $user->college = $request->college;
         $user->phone = $request->phone;
         $user->work_experience = $request->work_experience;
+        if ($request->hasFile('profile_image')) {
+
+            if (Storage::exists('public/images/' . $user->getRawOriginal('profile_image'))) {
+                Storage::delete('public/images/' . $user->getRawOriginal('profile_image'));
+            }
+            $filename = "user_" . $user->id . "." . $request->profile_image->extension();
+            $request->profile_image->storeAs('images', $filename, 'public');
+            $user->profile_image = $filename;
+        }
 
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password);

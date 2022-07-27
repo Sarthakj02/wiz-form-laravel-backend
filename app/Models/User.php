@@ -88,6 +88,6 @@ class User extends Authenticatable
      */
     public function getProfileImageAttribute($value)
     {
-        return public_path($value);
+        return url("storage/images/" . $value);
     }
 }
