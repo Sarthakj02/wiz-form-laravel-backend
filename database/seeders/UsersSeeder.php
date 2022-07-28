@@ -28,6 +28,7 @@ class UsersSeeder extends Seeder
                 "dob" => $faker->date,
                 "created_at" => now(),
                 "updated_at" => now(),
+                "profile_image" => 'http://127.0.0.1:8000/storage/images/user_3.jpg',
                 "cgpa" => $faker->numberBetween(0, 10),
                 "hobby" => $faker->randomElement(["Reading", "Singing", "Dancing", "Swimming"]),
                 "work_experience" => $faker->text(50),
