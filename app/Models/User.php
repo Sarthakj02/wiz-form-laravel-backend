@@ -67,23 +67,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Add sorting to the Model.
-     *
-     */
-    public function scopeSort($query)
-    {
-        if (request()->sortOrder === 'desc') {
-            $query->orderBy(request()->sortField, 'desc');
-        } elseif (request()->sortOrder === 'asc') {
-            $query->orderBy(request()->sortField, 'asc');
-        } else {
-            $query->orderBy('id', 'desc');
-        }
-
-        return $query;
-    }
-
-    /**
      * @return array
      */
     public function getProfileImageAttribute($value)
