@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::latest('id')->paginate(10);
+        $users = User::filter($request->all())->latest('id')->paginate(10);
         // \Log::info(request()->sortOrder);
         // \Log::info(request()->sortField);
         $users->sort();
