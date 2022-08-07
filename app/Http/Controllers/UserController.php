@@ -53,7 +53,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
         if ($request->hasFile('profile_image')) {
-            $filename = "user_" . $user->id . "." . $request->profile_image->extension();
+            $filename = "user_" . $user->id . "_" . time() . "." . $request->profile_image->extension();
             $request->profile_image->storeAs('images', $filename, 'public');
             $user->profile_image = $filename;
         }
@@ -120,7 +120,7 @@ class UserController extends Controller
             if (Storage::exists('public/images/' . $user->getRawOriginal('profile_image'))) {
                 Storage::delete('public/images/' . $user->getRawOriginal('profile_image'));
             }
-            $filename = "user_" . $user->id . "." . $request->profile_image->extension();
+            $filename = "user_" . $user->id . "_" . time() . "." . $request->profile_image->extension();
             $request->profile_image->storeAs('images', $filename, 'public');
             $user->profile_image = $filename;
         }
