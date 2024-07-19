@@ -92,7 +92,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //\Log::info();
+        // \Log::info();
         $request->validate([
             'name'    => 'required',
             'email'   => 'required|email',
